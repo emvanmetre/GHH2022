@@ -3,8 +3,6 @@ import pygame, sys
 from pygame.locals import *
 import pygame.freetype
 from pygame import mixer
-from pygame.sprite import Sprite
-from pygame.rect import Rect
 from tkinter import *
 from tkinter import messagebox
 import pygamepopup
