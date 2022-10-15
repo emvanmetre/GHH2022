@@ -1,0 +1,5 @@
+#Start Screen
+from tkinter import messagebox
+start = messagebox.askokcancel(title="Hoo's Pooping?", message="Welcome to Hoo's Pooping? As you go around Grounds, mark your bowel movements. Use the arrow keys to navigate the map. Press space to mark your poops! Press OK to continue or CANCEL to quit.")
+if start == False:
+    sys.exit()
