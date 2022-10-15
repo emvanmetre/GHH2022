@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import messagebox
 import pygamepopup
 from pygamepopup.components import Button, InfoBox
+import time
 
 # Global Variables
 clock = pygame.time.Clock()
@@ -73,8 +74,23 @@ def intro():
         pygame.display.update()
         clock.tick(15)
 
+# Dropping a Log
+imgPoop_rect = imgPoop.get_rect(center = (60, 60))
 
+def stamp(pos, surf):
+    stamps.append((pos, surf))
 
+def draw_stamps(target_surf):
+    for pos, surf in stamps:
+         target_surf.blit(surf, pos)
+
+    keys = pygame.key.get_pressed()
+    imgPoop_rect.x += (keys[pygame.K_d] - keys[pygame.K_a]) * 5
+    imgPoop_rect.y += (keys[pygame.K_s] - keys[pygame.K_w]) * 5
+    imgPoop_rect.clamp_ip(screen.get_rect())
+
+# Fart Sound Effect
+fartSound = pygame.mixer.Sound("venv/content/music/fart.wav")
 
 # Bowel (Sprite) Movement Mechanics
 sprite = imgPoop
@@ -91,6 +107,7 @@ while loop:
             loop = False
             # sys.exit() # this will close the kernel too
             # in development mode leave the comment above
+
     # This is the list with the keys being pressed, boundaries appended
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and x > 2:  # Making sure the top left position of our character is greater than our vel so we never move off the screen.
@@ -102,6 +119,17 @@ while loop:
     if keys[pygame.K_DOWN] and y < 530:
         y += 5
     pygame.time.delay(0)
+
+# Placing a Poop
+    if keys[pygame.K_SPACE]:
+        fartSound.play()
+        time.sleep(0.2)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.K_SPACE:
+            stamp(imgPoop_rect.topleft, imgPoop)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -122,12 +150,11 @@ while done == False:
 
     # Draw graphics
 
- ##   window.fill(bgColor)
-
+##    window.fill(bgColor)
  ##   window.blit(imgGrass, (0, 0))  # draw at (0,0)
  ##   window.blit(imgPoop, (0, 0))  # draw at (0,0)
 
-    # Update screen
+    # Update Screen
     pygame.display.flip()
     clock.tick(fps)
 
