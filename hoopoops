@@ -45,6 +45,7 @@ mixer.music.play(-1)
 
 # Fart Sound Effect
 fartSound = pygame.mixer.Sound("venv/content/music/fart.wav")
+flushSound = pygame.mixer.Sound("venv/content/music/flush.wav")
 
 # Bowel (Sprite) Movement Mechanics
 sprite = imgPoop
@@ -85,6 +86,7 @@ while loop:
     # Done Pooping
     pygame.time.delay(0)
     if keys[pygame.K_SPACE] and 725 < x < 920 and 500 < y < 580:
+        flushSound.play()
         start = messagebox.askokcancel(title="Done Pooping?", message= "Now that you are done pooping, please wipe and flush. You have pooped " + str(count) + " time(s). Stinky, stinky!")
         if start == False:
             sys.exit()
