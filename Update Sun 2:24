@@ -1,0 +1,143 @@
+# Importing Packages
+import sys
+
+import pygame.freetype
+from pygame import mixer
+
+
+# Global Variables
+clock = pygame.time.Clock()
+screenWidth = 920
+screenHeight = 580
+size = 920, 580
+timer = None
+fps = 120
+pygame.display.set_caption('HOOSPOOPING?????')
+x, y = 200, 130
+black = (0, 0, 0)
+white = (255, 255, 255)
+green = (0, 255, 0)
+red = (255, 0, 0)
+bright_red = (255, 0, 0)
+bright_green = (0, 255, 0)
+count = 0
+
+# Load Graphics
+imgGrass = pygame.image.load("venv/content/Graphics/grass.png")
+imgGrass = pygame.transform.scale(imgGrass, (920, 580))
+imgPoop = pygame.image.load("venv/content/Graphics/poop.png")
+imgPoop = pygame.transform.scale(imgPoop, (50, 50))
+
+# Initialization Function
+pygame.init()
+screen = pygame.display.set_mode((size))
+pygame.display.set_caption("HoosPooping??")
+mixer.init()
+mixer.music.load("venv/content/music/8_bit_fun.mp3")
+mixer.music.set_volume(0.2)
+mixer.music.play(-1)
+
+# Fart Sound Effect
+fartSound = pygame.mixer.Sound("venv/content/music/fart.wav")
+
+# Instantiate game components
+sprite = imgPoop
+loop = True
+poops = []
+start = False
+startScreen = pygame.image.load("venv/content/Graphics/Intro.png")
+startScreen = pygame.transform.scale(startScreen, (880, 540))
+startButton = pygame.image.load("venv/content/Graphics/Start.png")
+startButton = pygame.transform.scale(startButton, (600,150))
+endScreen = pygame.image.load("venv/content/Graphics/alldone.png")
+endScreen = pygame.transform.scale(endScreen, (628, 236))
+
+
+
+
+# Game Loop
+while loop:
+    screen.fill((0, 0, 0))
+    screen.blit(imgGrass, (0, 0))
+    # this adds the sprite at every frame rate
+
+    i = 0
+    while i < len(poops):
+        screen.blit(sprite, (poops[i], poops[i+1]))
+        i = i + 2
+
+    screen.blit(sprite, (x, y))
+
+    if not start:
+        screen.blit(startScreen, (20, 20))
+        screen.blit(startButton, (150, 400))
+
+    # Show Poop Count
+    if start:
+        white = (255, 255, 255)
+        font = pygame.font.Font("venv/content/fonts/comicsansms.ttf", 26)
+        text = font.render('Poops: ' + str(count), True, white)
+        textRect = text.get_rect()
+        textRect.center = (820, 20)
+        screen.blit(text, textRect)
+
+
+# If Click
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse = pygame.mouse.get_pos()
+            # Start or Quit
+            if start == False:
+                if 177 <= mouse[0] <= 429 and 429 <= mouse[1] <= 525:
+                    start = True
+                if 470 < mouse[0] < 721 and 429 < mouse[1] < 525:
+                    loop = False
+            # Finish Game
+            if start and 725 <= mouse[0] <= 919 and 500 <= mouse[y] <= 579:
+                screen.blit(endScreen, (400, 250))
+                end = True
+                while end:
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            mouse = pygame.mouse.getpos()
+                loop = False
+
+
+    # This is the list with the keys being pressed, boundaries appended
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and x > 2 and start:
+        # Making sure the top left position of our character is greater than our vel so we never move off the screen.
+        x -= 5
+    if keys[pygame.K_RIGHT] and x < 870 and start:
+        # Making sure the top right corner of our character is less than the screen width - its width
+        x += 5
+    if keys[pygame.K_UP] and y > 2 and start:  # Same principles apply for the y coordinate
+        y -= 5
+    if keys[pygame.K_DOWN] and y < 530 and start:
+        y += 5
+        # Dropping a Poop
+    if keys[pygame.K_SPACE] and not (725 < x < 920 and 500 < y < 580) and start:
+        poops.append(x)
+        poops.append(y)
+        fartSound.play()
+        count += 1
+        pygame.time.delay(200)
+    # Done Pooping
+    pygame.time.delay(0)
+
+
+
+    pygame.time.delay(0)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            loop = False
+    # we update the screen at every frame
+    pygame.display.flip()
+    # if we put the frame rate at 60 the sprite will move slower
+    clock.tick(120)
+
+
+    pygame.display.flip()
+    clock.tick(fps)
+
