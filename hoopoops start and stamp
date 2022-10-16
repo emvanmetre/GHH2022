@@ -42,6 +42,8 @@ mixer.music.load("venv/content/music/8_bit_fun.mp3")
 mixer.music.set_volume(0.2)
 mixer.music.play(-1)
 
+# Fart Sound Effect
+fartSound = pygame.mixer.Sound("venv/content/music/fart.wav")
 
 # Bowel (Sprite) Movement Mechanics
 sprite = imgPoop
@@ -75,6 +77,7 @@ while loop:
     if keys[pygame.K_SPACE]:
         poops.append(x)
         poops.append(y)
+        fartSound.play()
         pygame.time.delay(200)
     pygame.time.delay(0)
 
